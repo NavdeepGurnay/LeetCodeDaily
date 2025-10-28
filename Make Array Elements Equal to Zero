@@ -1,0 +1,83 @@
+// Brute force approach 
+//Time complexity: O(n2m).
+There are O(n) possible initial positions, each simulated in two directions. Each simulation takes O(nm) time, giving a total time complexity of O(n2m).
+
+Space complexity: O(n).
+A copy of the array nums is needed for each simulation.
+//
+class Solution {
+public:
+    int countValidSelections(vector<int>& nums) {
+        int count = 0;
+        int nonZeros = 0;
+        int n = nums.size();
+
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > 0) {
+                nonZeros++;
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == 0) {
+                if (isValid(nums, nonZeros, i, -1)) {
+                    count++;
+                }
+                if (isValid(nums, nonZeros, i, 1)) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+private:
+    bool isValid(const vector<int>& nums, int nonZeros, int start,
+                 int direction) {
+        int n = nums.size();
+        vector<int> temp(nums);
+        int curr = start;
+
+        while (nonZeros > 0 && curr >= 0 && curr < n) {
+            if (temp[curr] > 0) {
+                temp[curr]--;
+                direction *= -1;
+                if (temp[curr] == 0) {
+                    nonZeros--;
+                }
+            }
+            curr += direction;
+        }
+
+        return nonZeros == 0;
+    }
+};
+
+// Optimised using prefix -ssufix
+
+
+class Solution {
+public:
+    int countValidSelections(vector<int>& nums) {
+        int n = nums.size();
+        int total = accumulate(nums.begin(), nums.end(), 0);
+        int prefix = 0;
+        int ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            total -= nums[i]; // total now becomes suffix sum (right side)
+            
+            if (nums[i] == 0) {
+                if (prefix == total)
+                    ans += 2;
+                else if (abs(prefix - total) == 1)
+                    ans += 1;
+            }
+
+            prefix += nums[i];
+        }
+
+        return ans;
+    }
+};
