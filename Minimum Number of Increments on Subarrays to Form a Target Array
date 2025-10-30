@@ -1,0 +1,32 @@
+Intuition
+Draw array elements asa height of peaks in mountain valley.
+Try to draw various edge cases as a mountains peaks.(first highest peak, middle highest peak, last peak as the highest)
+because every time you start with something greater than previous element, there start a new subarray (new peak of the mountain) and we will start new addition of values.
+
+Approach
+Draw num values as peaks of the mountain, u will understand how it is actually working.
+
+Complexity
+Time complexity:
+O(n)
+
+Space complexity:
+O(1)
+
+Code
+class Solution {
+public:
+    int minNumberOperations(vector<int>& target) {
+        int n = target.size();
+        int ans = target[0];
+        for(int i = 1;i<n;i++){
+            // new peak start
+            if(target[i] > target[i-1]){
+                ans += target[i] - target[i-1];
+                
+            }
+            
+        }
+        return ans;
+    }
+};
