@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int minCost(string colors, vector<int>& neededTime) {
+        int n = colors.length();
+        int ans = 0;
+        int prev_ind = 0;
+        for(int i =1;i<n;i++){
+            if(colors[i] == colors[prev_ind]){
+
+                // we will cut the ith element and prev relamin same 
+                if(neededTime[i] <= neededTime[prev_ind]){
+                    ans += neededTime[i];
+                }
+                else{
+                    ans += neededTime[prev_ind];
+                    prev_ind = i;
+                }
+                
+            }
+            else{
+                prev_ind = i;
+            }
+        }
+        return ans;
+    }
+};
