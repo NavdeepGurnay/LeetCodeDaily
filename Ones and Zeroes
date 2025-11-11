@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int solve(int i, vector<string>&strs,int c0, int c1, int m, int n,vector<vector<vector<int>>>&dp){
+        if(i >= strs.size()){
+            return 0;
+        }
+        if(dp[i][c0][c1] != -1){
+            return dp[i][c0][c1];
+        }
+
+        int c_0 = 0;
+        int c_1 = 0;
+        for(char c : strs[i]){
+            if(c == '0'){
+                c_0++;
+            }
+            else{
+                c_1++;
+            }
+        }
+        // we do not want to pick 
+        int np = solve(i+1,strs,c0,c1,m,n,dp);
+        int p = 0;
+        if( c_0 + c0 <= m && c_1 + c1 <= n){
+            p = 1 + solve(i+1,strs,c_0 +c0 , c_1 + c1,m,n,dp);
+        }
+        return dp[i][c0][c1] = max(p,np);
+    }
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        vector<vector<vector<int>>> dp(strs.size(), vector<vector<int>>(m + 1, vector<int>(n + 1, -1)));
+        return solve(0,strs,0,0,m,n,dp);
+       
+    }
+};
+/*
+0 - 10 - 1,1
+1- 0 - 1,0
+2 - 1 - 0,1
+// p, np, np
+ind = 0 , p = 1,1, np , 0,0 , str = 10
+ind = 1, np = 1,1 str = 10
+ind = 2 , np = 1, 1 str = 10
+
+// np , p , p
+ind = 0 ,  np , 0,0 , str = ""
+ind = 1, p = 1,0 str = "0"
+ind = 2 , p = 1, 1 str = "01"
+// np, p, np
+str = "0"
+// np, np, p
+str = "1"
+ans = "10", "01"  gives 2 length( we don't need to take str we can just count 0's, and 1's and compare and add the length into our current ans)
+*/
